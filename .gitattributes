@@ -1,4 +1,6 @@
 * text=auto !eol
+/.classpath -text svneol=unset#text/plain
+/.project -text svneol=unset#text/plain
 /pom.xml -text
 src/site/checkstyle.xml -text
 src/site/site.xml -text
