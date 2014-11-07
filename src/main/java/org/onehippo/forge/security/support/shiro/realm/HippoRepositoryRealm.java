@@ -21,6 +21,7 @@ import java.util.Set;
 
 import javax.jcr.Credentials;
 import javax.jcr.LoginException;
+import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
@@ -58,7 +59,7 @@ public class HippoRepositoryRealm extends AuthorizingRealm {
 
     private static final String DEFAULT_GROUPS_OF_USER_QUERY = "//element(*, hipposys:group)[(@hipposys:members = ''{0}'' or @hipposys:members = ''*'') and @hipposys:securityprovider = ''internal'']";
 
-    private static final String DEFAULT_ROLES_OF_USER_AND_GROUP_QUERY = "//hippo:configuration/hippo:domains/{0}/element(*, hipposys:authrole)[ @hipposys:users = ''{1}'' {2}]";
+    private static final String DEFAULT_ROLES_OF_USER_AND_GROUP_QUERY = "//hippo:configuration/hippo:domains//element(*, hipposys:authrole)[ @hipposys:users = ''{0}'' {1} ]";
 
     private Repository systemRepository;
 
@@ -70,8 +71,6 @@ public class HippoRepositoryRealm extends AuthorizingRealm {
 
     private String groupsOfUserQuery = DEFAULT_GROUPS_OF_USER_QUERY;
 
-    private String roleDomainName = "everywhere";
-
     private String rolesOfUserAndGroupQuery = DEFAULT_ROLES_OF_USER_AND_GROUP_QUERY;
 
     private String defaultRoleName;
@@ -79,6 +78,8 @@ public class HippoRepositoryRealm extends AuthorizingRealm {
     private String rolePrefix;
 
     private boolean permissionsLookupEnabled;
+
+    private String defaultPermission;
 
     public void setSystemRepository(Repository systemRepository) {
         this.systemRepository = systemRepository;
@@ -129,14 +130,6 @@ public class HippoRepositoryRealm extends AuthorizingRealm {
         return groupsOfUserQuery;
     }
 
-    public void setRoleDomainName(String roleDomainName) {
-        this.roleDomainName = roleDomainName;
-    }
-
-    public String getRoleDomainName() {
-        return roleDomainName;
-    }
-
     public void setRolesOfUserAndGroupQuery(String rolesOfUserAndGroupQuery) {
         this.rolesOfUserAndGroupQuery = rolesOfUserAndGroupQuery;
     }
@@ -167,6 +160,14 @@ public class HippoRepositoryRealm extends AuthorizingRealm {
 
     public void setPermissionsLookupEnabled(boolean permissionsLookupEnabled) {
         this.permissionsLookupEnabled = permissionsLookupEnabled;
+    }
+
+    public String getDefaultPermission() {
+        return defaultPermission;
+    }
+
+    public void setDefaultPermission(String defaultPermission) {
+        this.defaultPermission = defaultPermission;
     }
 
     @Override
@@ -200,7 +201,8 @@ public class HippoRepositoryRealm extends AuthorizingRealm {
         } finally {
             try {
                 session.logout();
-            } catch (Exception ignore) {
+            } catch (Exception e) {
+                log.error("Failed to logout jcr session. {}", e);
             }
         }
 
@@ -253,24 +255,12 @@ public class HippoRepositoryRealm extends AuthorizingRealm {
             QueryResult result = q.execute();
             NodeIterator nodeIt = result.getNodes();
 
-            StringBuilder groupsConstraintsBuilder = new StringBuilder(100);
-
-            while (nodeIt.hasNext()) {
-                String groupName = nodeIt.nextNode().getName();
-                groupsConstraintsBuilder.append("or @hipposys:groups = '").append(groupName).append("' ");
-            }
-
-            statement = MessageFormat.format(getRolesOfUserAndGroupQuery(), getRoleDomainName(), username,
-                    groupsConstraintsBuilder.toString());
-
-            q = session.getWorkspace().getQueryManager().createQuery(statement, getQueryLanguage());
-            result = q.execute();
-            nodeIt = result.getNodes();
-
             boolean defaultRoleAdded = false;
+            Node node;
 
             while (nodeIt.hasNext()) {
-                String roleName = nodeIt.nextNode().getProperty("hipposys:role").getString();
+                node = nodeIt.nextNode();
+                String roleName = node.getName();
                 String prefixedRoleName = (rolePrefix != null ? rolePrefix + roleName : roleName);
                 roleNames.add(prefixedRoleName);
 
@@ -296,7 +286,8 @@ public class HippoRepositoryRealm extends AuthorizingRealm {
             if (session != null) {
                 try {
                     session.logout();
-                } catch (Exception ignore) {
+                } catch (Exception e) {
+                    log.error("Failed to logout jcr session. {}", e);
                 }
             }
         }
@@ -305,7 +296,77 @@ public class HippoRepositoryRealm extends AuthorizingRealm {
     }
 
     protected Set<String> getPermissions(String username, Set<String> roleNames) throws AuthorizationException {
-        return null;
-    }
+        Set<String> permissions = new HashSet<String>();
 
+        Session session = null;
+
+        try {
+            if (getSystemCredentials() != null) {
+                session = getSystemRepository().login(getSystemCredentials());
+            } else {
+                session = getSystemRepository().login();
+            }
+
+            StringBuilder groupsConstraintsBuilder = new StringBuilder(100);
+
+            for (String roleName : roleNames) {
+                String groupName = roleName;
+                groupsConstraintsBuilder.append("or @hipposys:groups = '").append(groupName).append("' ");
+            }
+
+            String statement = MessageFormat.format(getRolesOfUserAndGroupQuery(), username,
+                    groupsConstraintsBuilder.toString());
+
+            Query q = session.getWorkspace().getQueryManager().createQuery(statement, getQueryLanguage());
+            QueryResult result = q.execute();
+            NodeIterator nodeIt = result.getNodes();
+
+            Node node;
+            Node parentNode;
+
+            String domain;
+            String authority;
+            String permission;
+
+            boolean defaultPermissionAdded = false;
+
+            while (nodeIt.hasNext()) {
+                node = nodeIt.nextNode();
+                parentNode = node.getParent();
+
+                domain = parentNode.getName();
+                authority = node.getProperty("hipposys:role").getString();
+
+                permission = new StringBuilder(20).append(domain).append(':').append(authority).toString();
+                permissions.add(permission);
+
+                if (defaultPermission != null && !defaultPermissionAdded && defaultPermission.equals(permission)) {
+                    defaultPermissionAdded = true;
+                }
+            }
+
+            if (!defaultPermissionAdded && defaultPermission != null) {
+                permissions.add(defaultPermission);
+            }
+        } catch (RepositoryException e) {
+            final String message = "There was a repository exception while authorizing user [" + username + "]";
+
+            if (log.isErrorEnabled()) {
+                log.error(message, e);
+            }
+
+            // Rethrow any SQL errors as an authorization exception
+            throw new AuthorizationException(message, e);
+        } finally {
+            if (session != null) {
+                try {
+                    session.logout();
+                } catch (Exception e) {
+                    log.error("Failed to logout jcr session. {}", e);
+                }
+            }
+        }
+
+        return permissions;
+    }
 }
