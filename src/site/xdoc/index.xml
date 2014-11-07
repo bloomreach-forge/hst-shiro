@@ -30,14 +30,7 @@
         </p>
         <ul>
           <li>
-            Hippo Repository based Realm component providing authentication/authorization against Hippo Repository security data store.
-            <br/>
-            See <a href="http://hst-shirointeg.forge.onehippo.org/apidocs/org/onehippo/forge/security/support/shiro/realm/HippoRepositoryRealm.html">Javadoc of HippoRepositoryRealm</a> for detail.
-          </li>
-          <li>
-            Shiro Security Valve in order to translate Apache Shiro Subject to HST-2 Subject.
-            <br/>
-            See <a href="http://hst-shirointeg.forge.onehippo.org/apidocs/org/onehippo/forge/security/support/shiro/realm/HippoRepositoryRealm.html">Javadoc of ShiroSecurityValve</a> for detail.
+            <a href="hipporepo-realm.html">Hippo Repository based Realm component</a> providing authentication/authorization against Hippo Repository security data store.
           </li>
         </ul>
         <p>
