@@ -21,7 +21,7 @@
 
       <subsection name="Introduction">
         <p>
-          This page will explain (a) how <code>HippoRepositoryRealm</code> authenticates an user against Hippo Repository security data store,
+          This page will explain (a) how <code>HippoRepositoryRealm</code> authenticates a user against Hippo Repository security data store,
           (b) how it finds roles and (c) how it assigns permissions for the authenticated user.
         </p>
         <p>
@@ -84,7 +84,7 @@ and @hipposys:securityprovider = 'internal'];
         ]]></source>
         </div>
         <p>
-          Next, in each <code>hipposys:authrole</code> node under a domain node (e.g, 'everywhere', 'hippodocuments', etc. under //hippo:configuration/hippo:domains/),
+          Next, in each <code>hipposys:authrole</code> node under a domain node (e.g, 'everywhere', 'hippodocuments', etc. under /hippo:configuration/hippo:domains/),
           <code>HippoRepositoryRealm</code> reads <code>hipposys:role</code> property.
         </p>
         <p>
