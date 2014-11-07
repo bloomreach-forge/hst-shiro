@@ -118,6 +118,10 @@ and @hipposys:securityprovider = 'internal'];
 [ "workflow:readonly", "hippodocuments:editor", "everywhere:admin" ]
         ]]></source>
         </div>
+        <p>
+          <strong><em>Note: </em></strong> Please see <a href="http://shiro.apache.org/permissions.html">Understanding Permissions in Apache Shiro</a>
+          for detail on how the permission strings work.
+        </p>
       </subsection>
 
     </section>
