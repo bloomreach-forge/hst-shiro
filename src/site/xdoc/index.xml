@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><!--
-    Copyright 2014 Hippo Licensed under the Apache License, Version 2.0
+    Copyright 2011 Hippo Licensed under the Apache License, Version 2.0
     (the "License"); you may not use this file except in compliance with
     the License. You may obtain a copy of the License at
 
@@ -19,9 +19,42 @@
     <section name="Introduction">
       <subsection name="What is HST - Apache Shiro Integration Support?">
         <p>
+          <a href="http://shiro.apache.org/" target="_blank">Apache Shiro</a>
+          is a powerful and easy-to-use Java security framework that performs authentication, authorization, cryptography, and session management.
+        </p>
+        <p>
+          HST - Apache Shiro Integration Support project provides seamless integration with Apache Shiro for HST-2 SITE applications.
+        </p>
+        <p>
+          Mainly, HST - Apache Shiro Integration Support project provides the following:
+        </p>
+        <ul>
+          <li>
+            Hippo Repository based Realm component providing authentication/authorization against Hippo Repository security data store.
+            <br/>
+            See <a href="http://hst-shirointeg.forge.onehippo.org/apidocs/org/onehippo/forge/security/support/shiro/realm/HippoRepositoryRealm.html">Javadoc of HippoRepositoryRealm</a> for detail.
+          </li>
+          <li>
+            Shiro Security Valve in order to translate Apache Shiro Subject to HST-2 Subject.
+            <br/>
+            See <a href="http://hst-shirointeg.forge.onehippo.org/apidocs/org/onehippo/forge/security/support/shiro/realm/HippoRepositoryRealm.html">Javadoc of ShiroSecurityValve</a> for detail.
+          </li>
+        </ul>
+        <p>
+          Because Apache Shiro provides a lot of out-of-box security integration solutions such as RDBMS,
+          LDAP and CAS authentication, you can take advantage of those with HST-2!
         </p>
       </subsection>
     </section>
+    <section name="Project status">
+      <p>
+        Please see <a href="release-notes.html">Release Notes</a>.
+      </p>
+      <p>
+        See the
+        <a href="http://forge.onehippo.org/gf/project/hst-shirointeg">forge project page</a>
+        for more info about the project itself.
+      </p>
+    </section>
   </body>
 </document>
-

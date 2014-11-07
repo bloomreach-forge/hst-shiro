@@ -1,0 +1,153 @@
+<?xml version="1.0"?><!--
+    Copyright 2011 Hippo Licensed under the Apache License, Version 2.0
+    (the "License"); you may not use this file except in compliance with
+    the License. You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+    applicable law or agreed to in writing, software distributed under
+    the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
+    OR CONDITIONS OF ANY KIND, either express or implied. See the
+    License for the specific language governing permissions and
+    limitations under the License.
+  --><!DOCTYPE document PUBLIC "-//Apache Software Foundation//DTD XDOC 1.0//EN"
+  "http://maven.apache.org/dtd/xdoc_1_0.dtd">
+<document>
+  <properties>
+    <title>Configuration</title>
+  </properties>
+  <body>
+    <section name="Configuration">
+      <subsection name="Simple INI Configuration Example with Apache Shiro">
+        <p>
+          One of the simplest setup for a web application is to add /WEB-INF/shiro.ini file
+          as explained in <a href="http://shiro.apache.org/webapp-tutorial.html" target="_blank">Securing Web Applications with Apache Shiro</a>.
+        </p>
+        <p>
+          A simple INI configuration with HippoRepositoryRealm can be configured like the following example:
+        </p>
+        <div class="brush: plain">
+        <source><![CDATA[
+[main]
+
+hippoRealm = org.onehippo.forge.security.support.shiro.realm.HippoRepositoryRealm
+hippoRealm.defaultRoleName = everybody
+hippoRealm.permissionsLookupEnabled = true
+
+securityManager.realms = $hippoRealm
+
+cacheManager = org.apache.shiro.cache.MemoryConstrainedCacheManager
+securityManager.cacheManager = $cacheManager
+
+shiro.loginUrl = /login.jsp
+
+
+[urls]
+
+/login.jsp = authc
+/logout = logout
+/events/** = authc
+        ]]></source>
+        </div>
+      </subsection>
+      <subsection name="Adding ShiroSecurityValve into the Existing Pipeline(s)">
+        <p>
+          In order to enable Apache Shiro Security Integration in your SITE application, you should insert 'ShiroSecurityValve' into your existing pipelines.
+        </p>
+        <p>
+          Basically, <code>ShiroSecurityValve</code> is responsible for
+          reading the Apache Shiro <code>Subject</code> instance if exists,
+          and establishing <code>javax.security.auth.Subject</code> for the whole HST-2 request processing
+          by converting Apache Shiro <code>Subject</code> into a set of
+          <code>java.security.Principal</code>s.
+        </p>
+        <p>
+          There can be three different pipelines in your project:
+        </p>
+        <ul>
+          <li>DefaultSitePipeline: The default website pipeline</li>
+          <li>JaxrsRestPlainPipeline: The Plain JAX-RS Service pipeline</li>
+          <li>JaxrsRestContentPipeline: The Content/Context Aware JAX-RS Service pipeline</li>
+        </ul>
+        <p>
+          In the example below, we append ShiroSecurityValve to the initializing valves of the default pipeline only.
+          If you want to enable Apache Shiro Security Integration in either of JAX-RS pipelines, you will
+          need to copy and paste the second bean definition block with changing the pipeline name argument.
+        </p>
+        <div class="brush: xml">
+        <source><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:lang="http://www.springframework.org/schema/lang"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                           http://www.springframework.org/schema/lang http://www.springframework.org/schema/beans/spring-lang-3.0.xsd
+                           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
+                           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+  <!-- Defininig ShiroSecurityValve -->
+  <bean id="shiroSecurityValve" class="org.onehippo.forge.security.support.shiro.container.ShiroSecurityValve">
+    <property name="valveName" value="shiroSecurityValve" />
+  </bean>
+
+  <!--
+    Appending ShiroSecurityValve to the initializing valves of the the default pipeline.
+    You may copy and paste the following block to insert the ShiroSecurityValve for more pipelines.
+    'DefaultSitePipeline' is for the default website pipeline.
+    'JaxrsRestPlainPipeline' is for the Plain JAX-RS Service pipeline.
+    'JaxrsRestContentPipeline' is for the Content/Context Aware JAX-RS Service pipeline.
+  -->
+  <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+    <property name="targetObject">
+      <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetObject" ref="org.hippoecm.hst.core.container.Pipelines" />
+        <property name="targetMethod" value="getPipeline" />
+        <property name="arguments">
+          <list>
+            <!--
+              You may use one of the following: 'DefaultSitePipeline', 'JaxrsRestPlainPipeline' or 'JaxrsRestContentPipeline'.
+            -->
+            <value>DefaultSitePipeline</value>
+          </list>
+        </property>
+      </bean>
+    </property>
+    <property name="targetMethod" value="addInitializationValve" />
+    <property name="arguments">
+      <ref bean="shiroSecurityValve" />
+    </property>
+  </bean>
+
+</beans>
+        ]]></source>
+        </div>
+      </subsection>
+      <subsection name="Securing Your Site">
+        <p>
+          Now, you can secure your web site by setting 'hst:authenticated', 'hst:roles' or 'hst:users' either 'hst:sitemapitem' node or 'hst:mount' node.
+        </p>
+        <p>
+          For example, if you have 'securedresource' sitemap item, and it has 'hst:authenticated=true' and 'hst:roles=admin,everybody', then
+          any requests to the sitemap item will be allowed only authenticated users.
+        </p>
+        <p>
+          HST - Apache Shiro Integration Support supports the same feature for authorization as the default HST-2 Security module provides.
+          So, please refer to the following link in order to learn how to set authorization.
+        </p>
+        <ul>
+          <li><a href="http://www.onehippo.org/library/concepts/security/hst-2-authentication-and-authorization-support.html">HST-2 Authentication and Authorization Support</a>.</li>
+        </ul>
+      </subsection>
+      <subsection name="Using Standard Security APIs">
+        <p>
+          Also, you can use JavaEE standard Security APIs now in your components or servlet/filter for programmatic security checks such as:
+        </p>
+        <ul>
+          <li><code>javax.servlet.http.HttpServletRequest#getUserPrincipal()</code></li>
+          <li><code>javax.servlet.http.HttpServletRequest#isUserInRole(java.lang.String role)</code></li>
+        </ul>
+      </subsection>
+    </section>
+  </body>
+</document>
