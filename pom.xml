@@ -21,7 +21,7 @@
   <description>HST-Apache Shiro Integration Support Components</description>
   <groupId>org.onehippo.forge.hst-shirointeg</groupId>
   <artifactId>hst-shirointeg</artifactId>
-  <version>0.03.00-SNAPSHOT</version>
+  <version>0.03.00</version>
   <url>http://hst-shirointeg.forge.onehippo.org/</url>
 
   <properties>
@@ -91,9 +91,9 @@
   </developers>
 
   <scm>
-    <connection>scm:svn:https://forge.onehippo.org/svn/hst-shirointeg/hst-shirointeg/trunk</connection>
-    <developerConnection>scm:svn:https://forge.onehippo.org/svn/hst-shirointeg/hst-shirointeg/trunk</developerConnection>
-    <url>https://forge.onehippo.org/svn/hst-shirointeg/hst-shirointeg/trunk</url>
+    <connection>scm:svn:https://forge.onehippo.org/svn/hst-shirointeg/hst-shirointeg/tags/hst-shirointeg-0.03.00</connection>
+    <developerConnection>scm:svn:https://forge.onehippo.org/svn/hst-shirointeg/hst-shirointeg/tags/hst-shirointeg-0.03.00</developerConnection>
+    <url>https://forge.onehippo.org/svn/hst-shirointeg/hst-shirointeg/tags/hst-shirointeg-0.03.00</url>
   </scm>
 
   <issueManagement>
