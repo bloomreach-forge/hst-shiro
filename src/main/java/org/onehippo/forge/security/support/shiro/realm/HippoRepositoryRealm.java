@@ -48,8 +48,9 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Realm that allows authentication and authorization against Hippo Repository security data store.
- * <p/>
+ * <p>
  * This realm supports caching by extending from {@link org.apache.shiro.realm.AuthorizingRealm}.
+ * </p>
  */
 public class HippoRepositoryRealm extends AuthorizingRealm {
 
