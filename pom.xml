@@ -21,20 +21,20 @@
   <description>HST-Apache Shiro Integration Support Components</description>
   <groupId>org.onehippo.forge.hst-shirointeg</groupId>
   <artifactId>hst-shirointeg</artifactId>
-  <version>0.03.01-SNAPSHOT</version>
+  <version>1.0.0-SNAPSHOT</version>
   <url>http://hst-shirointeg.forge.onehippo.org/</url>
 
   <properties>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.build.javaVersion>1.6</project.build.javaVersion>
+    <project.build.javaVersion>1.7</project.build.javaVersion>
 
     <jcr.version>2.0</jcr.version>
     <servlet-api.version>2.4</servlet-api.version>
-    <shiro.version>1.2.2</shiro.version>
+    <shiro.version>1.2.4</shiro.version>
 
-    <hippo.commons.version>1.02.06</hippo.commons.version>
-    <hippo.hst.version>2.26.11</hippo.hst.version>
+    <hippo.commons.version>2.1.0</hippo.commons.version>
+    <hippo.hst.version>3.2.0</hippo.hst.version>
 
     <commons.lang.version>2.6</commons.lang.version>
     <commons-beanutils.version>1.8.0</commons-beanutils.version>
