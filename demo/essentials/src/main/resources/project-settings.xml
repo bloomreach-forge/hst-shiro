@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<project>
+    <name>project-settings</name>
+    <beansFolder>site/src/main/java</beansFolder>
+    <bootstrapModule>bootstrap</bootstrapModule>
+    <cmsModule>cms</cmsModule>
+    <confirmParams>false</confirmParams>
+    <extraTemplates>true</extraTemplates>
+    <projectNamespace>hstshirointegdemo</projectNamespace>
+    <selectedBeansPackage>org.onehippo.forge.security.support.shiro.demo.beans</selectedBeansPackage>
+    <selectedComponentsPackage>org.onehippo.forge.security.support.shiro.demo.components</selectedComponentsPackage>
+    <selectedRestPackage>org.onehippo.forge.security.support.shiro.demo.rest</selectedRestPackage>
+    <setupDone>true</setupDone>
+    <siteModule>site</siteModule>
+    <templateLanguage>jsp</templateLanguage>
+    <useSamples>true</useSamples>
+    <webfilesSubModule>webfiles</webfilesSubModule>
+</project>
