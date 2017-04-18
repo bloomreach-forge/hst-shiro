@@ -27,9 +27,9 @@
         <div class="brush: xml">
         <source><![CDATA[
     <repository>
-      <id>hst-shirointeg-maven-repo</id>
-      <name>Hippo Maven 2 Forge HST - Apache Shiro Integration Support</name>
-      <url>http://forge.onehippo.org/svn/hst-shirointeg/maven2/</url>
+      <id>hippo-maven2-forge</id>
+      <name>Hippo Maven 2 Forge</name>
+      <url>http://maven.onehippo.com/maven2-forge</url>
     </repository>
         ]]></source>
         </div>

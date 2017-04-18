@@ -39,14 +39,47 @@
         </p>
       </subsection>
     </section>
+    <section name="Running Demo Application">
+      <subsection name="Check out demo application">
+        <p>
+          Fork me on GitHub: <a href="https://github.com/onehippo-forge/hst-shiro" target="_blank">https://github.com/onehippo-forge/hst-shiro</a>.
+        </p>
+        <p>
+          Build the project using Maven:
+        </p>
+        <div class="brush: bash">
+        <source>$ mvn install</source>
+        </div>
+        <p>And, build and run the demo in the <code>demo</code> subfolder.</p>
+        <div class="brush: bash">
+        <source><![CDATA[
+$ cd demo
+$ mvn clean package
+$ mvn -P cargo.run
+        ]]></source>
+        </div>
+      </subsection>
+      <subsection name="Testing the Demo Application">
+        <ul>
+          <li>
+            If you visit http://localhost:8080/site/, then by default, you can navigate all the pages
+            except of /events/** pages.
+            Please refer to the configuration in /WEB-INF/shiro.ini for the access configuration.
+          </li>
+          <li>
+            You can sign in by author/author, editor/editor or admin/admin.
+            And, you will be able to see different roles and permissions assigned to you in the Hippo Repository security data store.
+          </li>
+          <li>
+            Please see <a href="http://www.onehippo.org/library/concepts/security/repository-authorization-and-permissions.html">Repository Authorization and Permissions</a>
+            for details on how to configure Authorization in Hippo Repository.
+          </li>
+        </ul>
+      </subsection>
+    </section>
     <section name="Project status">
       <p>
         Please see <a href="release-notes.html">Release Notes</a>.
-      </p>
-      <p>
-        See the
-        <a href="http://forge.onehippo.org/gf/project/hst-shirointeg">forge project page</a>
-        for more info about the project itself.
       </p>
     </section>
   </body>

@@ -39,7 +39,7 @@
           If the login is sucessful, then the user should be authenticated. Otherwise, the authentication should fail.
         </p>
         <p>
-          See <a href="/apidocs/org/onehippo/forge/security/support/shiro/realm/HippoRepositoryRealm.html#doGetAuthenticationInfo(org.apache.shiro.authc.AuthenticationToken)">#doGetAuthenticationInfo(org.apache.shiro.authc.AuthenticationToken)</a> for detail.
+          See <a href="apidocs/org/onehippo/forge/security/support/shiro/realm/HippoRepositoryRealm.html#doGetAuthenticationInfo-org.apache.shiro.authc.AuthenticationToken-">#doGetAuthenticationInfo(org.apache.shiro.authc.AuthenticationToken)</a> for detail.
         </p>
       </subsection>
 
