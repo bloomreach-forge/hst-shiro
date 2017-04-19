@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/onehippo-forge/hst-shiro.svg?branch=develop)](https://travis-ci.org/onehippo-forge/hst-shiro)
 
 # HST - Apache Shiro Integration Support
 
