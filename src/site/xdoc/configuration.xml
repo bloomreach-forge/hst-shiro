@@ -83,7 +83,7 @@ shiro.loginUrl = /login.jsp
         </p>
         <p>
           Also see an example JSP page in the demo project:
-          <a href="https://github.com/onehippo-forge/hst-shiro/blob/master/demo/site/src/main/webapp/WEB-INF/jsp/hstshirointegdemo/homepage-main.jsp">https://github.com/onehippo-forge/hst-shiro/blob/master/demo/site/src/main/webapp/WEB-INF/jsp/hstshirointegdemo/homepage-main.jsp</a>.
+          <a href="https://github.com/bloomreach-forge/hst-shiro/blob/master/demo/site/src/main/webapp/WEB-INF/jsp/hstshirointegdemo/homepage-main.jsp">https://github.com/bloomreach-forge/hst-shiro/blob/master/demo/site/src/main/webapp/WEB-INF/jsp/hstshirointegdemo/homepage-main.jsp</a>.
         </p>
       </subsection>
       <subsection name="Using Standard Security APIs">
